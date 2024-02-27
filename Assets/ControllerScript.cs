@@ -96,15 +96,14 @@ public class ControllerScript : MonoBehaviour
     public void CheckGuess()
     {
         Debug.Log("starting guess");
-        model.Guess = inputField.text.ToLower();
-
+        model.Guess = inputField.text.ToLower().Trim();
         Debug.Log("GUESS: "+model.Guess);
         Debug.Log("ANSWER: "+model.Answer);
         bool validWord = false;
         foreach (string g in model.PossibleGuesses) //for loop that checks array of guess with array of answer
         {
-            Debug.Log(g);
-            if (model.Guess.Equals(g))
+            
+            if (model.Guess.Equals(g.Trim()))
             {
                 validWord = true;
                 break;
@@ -114,7 +113,7 @@ public class ControllerScript : MonoBehaviour
         {
             foreach (string g in model.PossibleAnswers) //for loop that checks array of guess with array of answer
             {
-                if (model.Guess.Equals(g))
+                if (model.Guess.Equals(g.Trim()))
                 {
                     validWord = true;
                     break;

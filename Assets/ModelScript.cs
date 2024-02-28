@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ModelScript : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class ModelScript : MonoBehaviour
         get { return guessCount; } 
         set { guessCount = value; } 
     }
+
+    public bool running = true;
 
     string answer;
     public string Answer
@@ -38,4 +41,5 @@ public class ModelScript : MonoBehaviour
         possibleAnswers = answers.ToString().Split("\n");
         possibleGuesses = guesses.ToString().Split("\n");
     }
+
 }

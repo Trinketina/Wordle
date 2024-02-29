@@ -36,10 +36,14 @@ public class ControllerScript : MonoBehaviour
     {
         model.Setup();
         view.Setup();
-        int a = UnityEngine.Random.Range(0, model.PossibleAnswers.Length - 1);
-        model.Answer = model.PossibleAnswers[a];
+        int rand = UnityEngine.Random.Range(0, model.PossibleAnswers.Length - 1);
+        model.Answer = model.PossibleAnswers[rand];
+
+        model.Answer = "flint";
+
 
         model.GuessCount = 0;
+        Debug.Log(model.Answer);
     }
     void GameRunning()
     {
@@ -56,19 +60,12 @@ public class ControllerScript : MonoBehaviour
     // Guess Logic -----------------------------------
     public void CheckGuess()
     {
-        if (model.GuessCount >= 5)
+        if (model.running && inputField.text.Length == 5)
         {
-            EndGame();
-            return;
-        }
-        if (inputField.IsActive() && inputField.text.Length == 5)
-        {
-            Debug.Log("starting guess");
             model.Guess = inputField.text.ToLower().Trim();
-            Debug.Log("GUESS: " + model.Guess);
-            Debug.Log("ANSWER: " + model.Answer);
+
             bool validWord = false;
-            foreach (string g in model.PossibleGuesses) //for loop that checks array of guess with array of answer
+            foreach (string g in model.PossibleAnswers) //for loop that checks array of guess with array of answers
             {
 
                 if (model.Guess.Equals(g.Trim()))
@@ -79,7 +76,7 @@ public class ControllerScript : MonoBehaviour
             }
             if (!validWord)
             {
-                foreach (string g in model.PossibleAnswers) //for loop that checks array of guess with array of answer
+                foreach (string g in model.PossibleGuesses) //for loop that checks array of guess with array of guesses
                 {
                     if (model.Guess.Equals(g.Trim()))
                     {
@@ -90,7 +87,6 @@ public class ControllerScript : MonoBehaviour
             }
             if (validWord)
             {
-                Debug.Log("is a valid word");
                 MakeGuess();
             }
         }
@@ -99,12 +95,12 @@ public class ControllerScript : MonoBehaviour
     private void MakeGuess()
     {
         model.GuessCount++;
-        Debug.Log(model.GuessCount);
-        Debug.Log("checking guess");
         char[] ans = model.Answer.Trim().ToCharArray();
+
         for (int g = 0; g < model.Guess.Length; g++)
         {
             bool hasColor = false;
+
             if (model.Guess[g].Equals(ans[g]))
             {
                 //set the letter to green?
@@ -112,7 +108,8 @@ public class ControllerScript : MonoBehaviour
                 view.SetGreen(model.GuessCount - 1, g, model.Guess[g]);
                 hasColor = true;
             }
-            else {
+            else
+            {
                 for (int a = 0; a < ans.Length; a++)
                 {
                     if (model.Guess[g].Equals(ans[a]))
@@ -131,27 +128,31 @@ public class ControllerScript : MonoBehaviour
                 view.SetGrey(model.GuessCount - 1, g, model.Guess[g]);
             }
         }
-        if (model.Guess.Equals(model.Answer.Trim()))
+        if (model.Guess.Equals(model.Answer.Trim()) || model.GuessCount >= 6)
         {
-            Debug.Log("Win!");
+            Debug.Log("Game Ends");
             EndGame();
             return;
             //--------------------
         }
+
         inputField.text = string.Empty;
         model.Guess = inputField.text;
+
+
+
     }
     void EndGame()
     {
         model.running = false;
         inputField.DeactivateInputField();
-        
     }
 
     // Keyboard -----------------------------------
     public void ButtonLetter(string l)//for some reason buttons don't let you request a char >:C
     {
-        inputField.text = (inputField.text.Length < 5) ? inputField.text += l : inputField.text; // this updates the input box which calls InputNewLetter()
+        if (model.running)
+            inputField.text = (inputField.text.Length < 5) ? inputField.text += l : inputField.text; // this updates the input box which calls InputNewLetter()
     }
     public void InputNewLetter()
     {
@@ -203,7 +204,10 @@ public class ControllerScript : MonoBehaviour
     }
     public void Backspace()
     {
-        inputField.text = inputField.text.Remove(inputField.text.Length - 1);
-        view.UpdateLetter(model.GuessCount, inputField.text.Length, ' ');
+        if (model.running)
+        {
+            inputField.text = inputField.text.Remove(inputField.text.Length - 1);
+            view.UpdateLetter(model.GuessCount, inputField.text.Length, ' ');
+        }
     }
 }

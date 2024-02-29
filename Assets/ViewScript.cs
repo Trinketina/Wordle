@@ -8,10 +8,8 @@ using UnityEngine.UI;
 public class ViewScript : MonoBehaviour
 {
     [SerializeField] Sprite blankSprite;
-    [SerializeField] Sprite filledSprite;
-    [SerializeField] Sprite greenSprite;
-    [SerializeField] Sprite yellowSprite;
-    [SerializeField] Sprite greySprite;
+    [SerializeField] Sprite guessedSprite;
+
 
     [SerializeField] Color green;
     [SerializeField] Color yellow;
@@ -21,12 +19,7 @@ public class ViewScript : MonoBehaviour
 
     Button[,] letterBoxes = new Button[6,5];
 
-    [SerializeField] ModelScript model;
 
-    /*float timer = 0;
-    int letter = 0;
-    bool startGuess;
-    bool flipped = false; */
     public void Setup()
     {
         HorizontalLayoutGroup[] row = guesses.GetComponentsInChildren<HorizontalLayoutGroup>();
@@ -53,13 +46,15 @@ public class ViewScript : MonoBehaviour
     public void SetGreen(int r, int c, char l)
     {
         //get the guessCount for the Row, and guess index for the Column
-        letterBoxes[r, c].image.sprite = greenSprite;
+        letterBoxes[r, c].image.sprite = guessedSprite;
+        letterBoxes[r, c].image.color = green;
         Image key = GameObject.Find(l.ToString().ToUpper()).GetComponent<Image>();
         key.color = green;
     }
     public void SetYellow(int r, int c, char l)
     {
-        letterBoxes[r, c].image.sprite = yellowSprite;
+        letterBoxes[r, c].image.sprite = guessedSprite;
+        letterBoxes[r, c].image.color = yellow;
         Image key = GameObject.Find(l.ToString().ToUpper()).GetComponent<Image>();
 
         if (key.color != green)
@@ -69,7 +64,8 @@ public class ViewScript : MonoBehaviour
     }
     public void SetGrey(int r, int c, char l)
     {
-        letterBoxes[r, c].image.sprite = greySprite;
+        letterBoxes[r, c].image.sprite = guessedSprite;
+        letterBoxes[r, c].image.color = gray;
         Image key = GameObject.Find(l.ToString().ToUpper()).GetComponent<Image>();
 
         if (key.color != green || key.color != yellow)
@@ -78,6 +74,10 @@ public class ViewScript : MonoBehaviour
 
     public void UpdateLetter(int r, int c, char l)
     {
+        if (l == ' ')
+            letterBoxes[r, c].image.color = gray;
+        else
+            letterBoxes[r, c].image.color = Color.white;
         letterBoxes[r, c].GetComponentInChildren<TMP_Text>().text = l.ToString();
     }
 }

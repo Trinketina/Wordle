@@ -36,6 +36,7 @@ public class ModelScript : MonoBehaviour
     [SerializeField] TextAsset answers;
     [SerializeField] TextAsset guesses; 
 
+
     public void Setup()
     {
         possibleAnswers = answers.ToString().Split("\n");

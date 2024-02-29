@@ -19,6 +19,8 @@ public class ViewScript : MonoBehaviour
 
     Button[,] letterBoxes = new Button[6,5];
 
+    [SerializeField] GameObject winScreen;
+
 
     public void Setup()
     {
@@ -79,5 +81,11 @@ public class ViewScript : MonoBehaviour
         else
             letterBoxes[r, c].image.color = Color.white;
         letterBoxes[r, c].GetComponentInChildren<TMP_Text>().text = l.ToString();
+    }
+
+    public void Win(int g)
+    {
+        winScreen.GetComponentInChildren<TMP_Text>().text = "Success! In " + g + " tries";
+        winScreen.SetActive(true);
     }
 }

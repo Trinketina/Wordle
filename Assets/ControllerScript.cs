@@ -39,9 +39,6 @@ public class ControllerScript : MonoBehaviour
         int rand = UnityEngine.Random.Range(0, model.PossibleAnswers.Length - 1);
         model.Answer = model.PossibleAnswers[rand];
 
-        model.Answer = "flint";
-
-
         model.GuessCount = 0;
         Debug.Log(model.Answer);
     }
@@ -97,6 +94,7 @@ public class ControllerScript : MonoBehaviour
         model.GuessCount++;
         char[] ans = model.Answer.Trim().ToCharArray();
 
+
         for (int g = 0; g < model.Guess.Length; g++)
         {
             bool hasColor = false;
@@ -114,6 +112,8 @@ public class ControllerScript : MonoBehaviour
                 {
                     if (model.Guess[g].Equals(ans[a]))
                     {
+                        if (ans[a] == model.Guess[a] && g != a)
+                            break;
                         ans[a] = ' ';
                         //or set the letter to yellow
                         view.SetYellow(model.GuessCount - 1, g, model.Guess[g]);
@@ -128,7 +128,17 @@ public class ControllerScript : MonoBehaviour
                 view.SetGrey(model.GuessCount - 1, g, model.Guess[g]);
             }
         }
-        if (model.Guess.Equals(model.Answer.Trim()) || model.GuessCount >= 6)
+
+
+
+        if (model.Guess.Equals(model.Answer.Trim()))
+        {
+            Debug.Log("You Win!");
+            WinGame();
+            return;
+            //--------------------
+        }
+        if (model.GuessCount >= 6)
         {
             Debug.Log("Game Ends");
             EndGame();
@@ -146,6 +156,13 @@ public class ControllerScript : MonoBehaviour
     {
         model.running = false;
         inputField.DeactivateInputField();
+    }
+
+    void WinGame()
+    {
+        view.Win(model.GuessCount);
+
+        EndGame();
     }
 
     // Keyboard -----------------------------------
@@ -204,7 +221,7 @@ public class ControllerScript : MonoBehaviour
     }
     public void Backspace()
     {
-        if (model.running)
+        if (model.running && inputField.text != "")
         {
             inputField.text = inputField.text.Remove(inputField.text.Length - 1);
             view.UpdateLetter(model.GuessCount, inputField.text.Length, ' ');

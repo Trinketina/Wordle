@@ -1,9 +1,4 @@
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using TMPro;
-using Unity.Mathematics;
-using Unity.PlasticSCM.Editor.WebApi;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ControllerScript : MonoBehaviour
@@ -141,7 +136,7 @@ public class ControllerScript : MonoBehaviour
         if (model.GuessCount >= 6)
         {
             Debug.Log("Game Ends");
-            EndGame();
+            LoseGame();
             return;
             //--------------------
         }
@@ -160,8 +155,13 @@ public class ControllerScript : MonoBehaviour
 
     void WinGame()
     {
-        view.Win(model.GuessCount);
+        view.End(model.GuessCount);
 
+        EndGame();
+    }
+    void LoseGame()
+    {
+        view.End(model.Answer);
         EndGame();
     }
 

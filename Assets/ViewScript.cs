@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -19,7 +16,7 @@ public class ViewScript : MonoBehaviour
 
     Button[,] letterBoxes = new Button[6,5];
 
-    [SerializeField] GameObject winScreen;
+    [SerializeField] GameObject endScreen;
 
 
     public void Setup()
@@ -83,9 +80,14 @@ public class ViewScript : MonoBehaviour
         letterBoxes[r, c].GetComponentInChildren<TMP_Text>().text = l.ToString();
     }
 
-    public void Win(int g)
+    public void End(int g)
     {
-        winScreen.GetComponentInChildren<TMP_Text>().text = "Success! In " + g + " tries";
-        winScreen.SetActive(true);
+        endScreen.GetComponentInChildren<TMP_Text>().text = "Success! In " + g + " tries";
+        endScreen.SetActive(true);
+    }
+    public void End(string w)
+    {
+        endScreen.GetComponentInChildren<TMP_Text>().text = "The word was " + w.Trim() + "...";
+        endScreen.SetActive(true);
     }
 }

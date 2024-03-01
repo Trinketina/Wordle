@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,7 +42,6 @@ public class ModelScript : MonoBehaviour
 
         int rand = UnityEngine.Random.Range(0, possibleAnswers.Length - 1);
         answer = possibleAnswers[rand].ToLower().Trim();
-
     }
 
     public bool IsValidGuess(string s)
@@ -77,11 +77,13 @@ public class ModelScript : MonoBehaviour
         {
             if (guess[g].Equals(ans[a]))
             {
-                if (ans[a] == guess[a] && g != a)
-                    break;
-                ans[a] = ' ';
-                //or set the letter to yellow
-                return 0;
+                if (ans[a] == guess[a] && g != a) { }
+                else
+                {
+                    ans[a] = ' ';
+                    //or set the letter to yellow
+                    return 0;
+                }
             }
         }
         //if not yellow or green, set to gray

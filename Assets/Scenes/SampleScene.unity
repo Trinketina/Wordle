@@ -9298,6 +9298,9 @@ MonoBehaviour:
   running: 1
   answers: {fileID: 4900000, guid: f1a7c7448d90f1e4790915ff00909184, type: 3}
   guesses: {fileID: 4900000, guid: da19e146c7f99f34798f6009f9d33a03, type: 3}
+  green: {r: 0.3254902, g: 0.5529412, b: 0.30588236, a: 1}
+  yellow: {r: 0.70980394, g: 0.62352943, b: 0.23137255, a: 1}
+  grey: {r: 0.22745098, g: 0.22745098, b: 0.23529412, a: 1}
 --- !u!4 &1137418984
 Transform:
   m_ObjectHideFlags: 0

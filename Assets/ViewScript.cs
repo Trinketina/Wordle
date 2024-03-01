@@ -42,32 +42,36 @@ public class ViewScript : MonoBehaviour
         
     }
 
-    public void SetGreen(int r, int c, char l)
+    public void SetGreen(int row, int col, char let)
     {
         //get the guessCount for the Row, and guess index for the Column
-        letterBoxes[r, c].image.sprite = guessedSprite;
-        letterBoxes[r, c].image.color = green;
-        Image key = GameObject.Find(l.ToString().ToUpper()).GetComponent<Image>();
+        letterBoxes[row, col].image.sprite = guessedSprite;
+        letterBoxes[row, col].image.color = green;
+
+        //set key color
+        Image key = GameObject.Find(let.ToString().ToUpper()).GetComponent<Image>();
         key.color = green;
     }
-    public void SetYellow(int r, int c, char l)
+    public void SetYellow(int row, int col, char let)
     {
-        letterBoxes[r, c].image.sprite = guessedSprite;
-        letterBoxes[r, c].image.color = yellow;
-        Image key = GameObject.Find(l.ToString().ToUpper()).GetComponent<Image>();
+        //get the guessCount for the Row, and guess index for the Column
+        letterBoxes[row, col].image.sprite = guessedSprite;
+        letterBoxes[row, col].image.color = yellow;
 
+        //set key color
+        Image key = GameObject.Find(let.ToString().ToUpper()).GetComponent<Image>();
         if (key.color != green)
             key.color = yellow;
-
-        
     }
-    public void SetGrey(int r, int c, char l)
+    public void SetGray(int row, int col, char let)
     {
-        letterBoxes[r, c].image.sprite = guessedSprite;
-        letterBoxes[r, c].image.color = gray;
-        Image key = GameObject.Find(l.ToString().ToUpper()).GetComponent<Image>();
+        //get the guessCount for the Row, and guess index for the Column
+        letterBoxes[row, col].image.sprite = guessedSprite;
+        letterBoxes[row, col].image.color = gray;
 
-        if (key.color != green || key.color != yellow)
+        //set key color
+        Image key = GameObject.Find(let.ToString().ToUpper()).GetComponent<Image>();
+        if (key.color != green && key.color != yellow)
             key.color = gray;
     }
 

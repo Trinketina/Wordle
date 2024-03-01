@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ControllerScript : MonoBehaviour
@@ -31,8 +32,6 @@ public class ControllerScript : MonoBehaviour
     {
         model.Setup();
         view.Setup();
-        int rand = UnityEngine.Random.Range(0, model.PossibleAnswers.Length - 1);
-        model.Answer = model.PossibleAnswers[rand];
 
         model.GuessCount = 0;
         Debug.Log(model.Answer);
@@ -53,80 +52,36 @@ public class ControllerScript : MonoBehaviour
     public void CheckGuess()
     {
         if (model.running && inputField.text.Length == 5)
-        {
-            model.Guess = inputField.text.ToLower().Trim();
-
-            bool validWord = false;
-            foreach (string g in model.PossibleAnswers) //for loop that checks array of guess with array of answers
+        { 
+            if (model.IsValidGuess(inputField.text.ToLower().Trim()))
             {
-
-                if (model.Guess.Equals(g.Trim()))
-                {
-                    validWord = true;
-                    break;
-                }
-            }
-            if (!validWord)
-            {
-                foreach (string g in model.PossibleGuesses) //for loop that checks array of guess with array of guesses
-                {
-                    if (model.Guess.Equals(g.Trim()))
-                    {
-                        validWord = true;
-                        break;
-                    }
-                }
-            }
-            if (validWord)
-            {
+                
                 MakeGuess();
             }
         }
     }
-
-    private void MakeGuess()
+    public void MakeGuess()
     {
+        model.Guess = inputField.text.ToLower().Trim();
         model.GuessCount++;
-        char[] ans = model.Answer.Trim().ToCharArray();
 
 
         for (int g = 0; g < model.Guess.Length; g++)
         {
-            bool hasColor = false;
-
-            if (model.Guess[g].Equals(ans[g]))
+            switch (model.UpdateCell(g))
             {
-                //set the letter to green?
-                ans[g] = ' ';
-                view.SetGreen(model.GuessCount - 1, g, model.Guess[g]);
-                hasColor = true;
-            }
-            else
-            {
-                for (int a = 0; a < ans.Length; a++)
-                {
-                    if (model.Guess[g].Equals(ans[a]))
-                    {
-                        if (ans[a] == model.Guess[a] && g != a)
-                            break;
-                        ans[a] = ' ';
-                        //or set the letter to yellow
-                        view.SetYellow(model.GuessCount - 1, g, model.Guess[g]);
-                        hasColor = true;
-                        break;
-                    }
-                }
-            }
-            //if not yellow or green, set to gray
-            if (!hasColor)
-            {
-                view.SetGrey(model.GuessCount - 1, g, model.Guess[g]);
+                case 0:
+                    view.SetYellow(model.GuessCount - 1, g, model.Guess[g]);
+                    break;
+                case 1:
+                    view.SetGreen(model.GuessCount - 1, g, model.Guess[g]);
+                    break;
+                default:
+                    view.SetGray(model.GuessCount - 1, g, model.Guess[g]);
+                    break;
             }
         }
-
-
-
-        if (model.Guess.Equals(model.Answer.Trim()))
+        if (model.Guess.Equals(model.Answer))
         {
             Debug.Log("You Win!");
             WinGame();
@@ -143,10 +98,8 @@ public class ControllerScript : MonoBehaviour
 
         inputField.text = string.Empty;
         model.Guess = inputField.text;
-
-
-
     }
+
     void EndGame()
     {
         model.running = false;
@@ -164,6 +117,8 @@ public class ControllerScript : MonoBehaviour
         view.End(model.Answer);
         EndGame();
     }
+
+
 
     // Keyboard -----------------------------------
     public void ButtonLetter(string l)//for some reason buttons don't let you request a char >:C
@@ -213,13 +168,13 @@ public class ControllerScript : MonoBehaviour
             }
             view.UpdateLetter(model.GuessCount, inputField.text.Length - 1, inputField.text[^1]);
         }
-        if (inputField.text.Length < model.Guess.Length)
+        if (inputField.text.Length < model.Guess.Length) //backspaced, so it needs to reflect that in the view
         {
             view.UpdateLetter(model.GuessCount, inputField.text.Length, ' ');
         }
-        model.Guess = inputField.text.ToLower().Trim();
+        model.Guess = inputField.text.ToLower().Trim(); 
     }
-    public void Backspace()
+    public void Backspace() //specific method for the backspace button in the keyboard
     {
         if (model.running && inputField.text != "")
         {

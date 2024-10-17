@@ -45,8 +45,11 @@ public class ViewScript : MonoBehaviour
     public void SetGreen(int row, int col, char let)
     {
         //get the guessCount for the Row, and guess index for the Column
-        letterBoxes[row, col].image.sprite = guessedSprite;
-        letterBoxes[row, col].image.color = green;
+        /*letterBoxes[row, col].image.sprite = guessedSprite;
+        letterBoxes[row, col].image.color = green;*/
+
+        letterBoxes[row, col].GetComponent<LetterBox>().newColor = green;
+        letterBoxes[row, col].animator.SetBool("Pressed", true);
 
         //set key color
         Image key = GameObject.Find(let.ToString().ToUpper()).GetComponent<Image>();
